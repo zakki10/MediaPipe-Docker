@@ -99,7 +99,7 @@ with mp_hands.Hands(
     fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
 
     # VideoWriterを作成します。
-    video = cv2.VideoWriter('./output/result.mp4', fmt, fps, (width, height))
+    video = cv2.VideoWriter('./output/annotated_video.mp4', fmt, fps, (width, height))
 
     while cap.isOpened():
         success, image = cap.read()
