@@ -19,5 +19,5 @@ CMD [ "python", "./your-mediapipe-script.py" ]
 - [公式サイト](https://google.github.io/mediapipe/)
 - [使用イメージ](https://hub.docker.com/r/ao2324/mediapipe)
 
-## サンプルコード
+## サンプル
 - [Hands](/Hands)
