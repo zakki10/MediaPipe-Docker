@@ -8,7 +8,7 @@
 ```bash
 $ git clone https://github.com/AO2324-00/MediaPipe-Docker.git
 ```
-2. `./app/hands.py` の30行目や80行目を編集して、処理を行いたいファイルを指定します。
+2. [`./app/hands.py`](/app/hands.py) の30行目や80行目を編集して、処理を行いたいファイルを指定します。
 ```py
 30  IMAGE_FILES = ["./example.png"] # 画像のファイルパスを配列に格納して下さい。
 
