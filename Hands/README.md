@@ -19,4 +19,4 @@ $ git clone https://github.com/AO2324-00/MediaPipe-Docker.git
 $ cd ./MediaPipe-Docker/Hands/
 $ docker-compose up
 ```
-4. `./app/output` ディレクトリに結果が出力されます。
+4. [`./app/output`](https://github.com/AO2324-00/MediaPipe-Docker/tree/main/Hands/app/output) ディレクトリに結果が出力されます。
