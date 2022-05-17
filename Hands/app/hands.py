@@ -49,7 +49,7 @@ with mp_hands.Hands(
         landmarks = hands.process(image)
         '''
             landmarks.multi_handedness
-             - 利き手の推定結果
+             - label: 左右どちらの手、score: 利き手の確率
             landmarks.multi_hand_landmarks
              - xとyはそれぞれ画像の幅と高さで[0.0, 1.0]に正規化された座標データ(zはxと同じスケーリングで奥行を表しています)
             landmarks.multi_hand_world_landmarks
@@ -70,8 +70,11 @@ with mp_hands.Hands(
         annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
 
         # ランドマークを描画した画像を出力します。
-        cv2.imwrite('./output/annotated_image' + str(index) + '.png', annotated_image)
+        cv2.imwrite('./output/annotated_image_' + str(index) + '.png', annotated_image)
 
+        # ワールド座標系のランドマーク座標をテキストファイルに書き出します。
+        with open('./output/world_lamdmarls_' + str(index) + '.txt', mode='w') as file:
+            file.write(str(landmarks.multi_hand_world_landmarks))
 
 
 '''
