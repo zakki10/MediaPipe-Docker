@@ -42,7 +42,7 @@ def draw_landmarks(image, landmarks):
 '''
 === 画像の場合 ================================================
 '''
-IMAGE_FILES = ["./input/static_images/test.jpg"] # 画像のファイルパスを配列に格納して下さい。
+IMAGE_FILES = [] # 画像のファイルパスを配列に格納して下さい。
 
 with mp_pose.Pose(
     static_image_mode = True,       # 単体の画像かどうか(Falseの場合は入力画像を連続したものとして扱います)。
@@ -91,7 +91,7 @@ with mp_pose.Pose(
 '''
 === 動画の場合 ================================================
 '''
-VIDEO_FILE = "./input/video/example.mp4" # 動画のファイルパスを入力して下さい。
+VIDEO_FILE = "" # 動画のファイルパスを入力して下さい。
 
 cap = cv2.VideoCapture(VIDEO_FILE)
 
