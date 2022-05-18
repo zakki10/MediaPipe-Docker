@@ -20,4 +20,5 @@ CMD [ "python", "./your-mediapipe-script.py" ]
 - [使用イメージ](https://hub.docker.com/r/ao2324/mediapipe)
 
 ## サンプル
-- [Hands](/Hands)
+- [Hands](https://github.com/AO2324-00/MediaPipe-Docker/tree/main/Hands)
+- [Pose](https://github.com/AO2324-00/MediaPipe-Docker/tree/main/Pose)
