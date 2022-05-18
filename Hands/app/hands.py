@@ -124,7 +124,7 @@ with mp_hands.Hands(
         # RGB画像をBGRに変換します。
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-        # 手が移っている場合、画像上に推定したランドマークを描画します。
+        # 手が映っている場合、画像上に推定したランドマークを描画します。
         if landmarks.multi_hand_landmarks:
             annotated_image = draw_landmarks(image, landmarks)
         else:
