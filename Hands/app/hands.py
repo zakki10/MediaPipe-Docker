@@ -27,8 +27,8 @@ def draw_landmarks(image, landmarks):
 '''
 === 画像の場合 ================================================
 '''
-IMAGE_FILES = [] # 画像のファイルパスを配列に格納して下さい。
-
+IMAGE_FILES = ['input/sample_072.png'] # 画像のファイルパスを配列に格納して下さい。
+filename = 'image'
 with mp_hands.Hands(
     static_image_mode = True,      # 単体の画像かどうか(Falseの場合は入力画像を連続したものとして扱います)。
     max_num_hands = 2,             # 認識する手の最大数。
@@ -73,14 +73,18 @@ with mp_hands.Hands(
         cv2.imwrite('./output/annotated_image_' + str(index) + '.png', annotated_image)
 
         # ワールド座標系のランドマーク座標をテキストファイルに書き出します。
-        with open('./output/world_lamdmarks_' + str(index) + '.txt', mode='w') as file:
+        with open('./output/world_lamdmarks_' + str(index) + filename + '.txt', mode='w') as file:
             file.write(str(landmarks.multi_hand_world_landmarks))
+        
+        
 
 
 '''
 === 動画の場合 ================================================
 '''
-VIDEO_FILE = "" # 動画のファイルパスを入力して下さい。
+"""
+filename = '20220922_hino'
+VIDEO_FILE = f"input/{filename}.mp4" # 動画のファイルパスを入力して下さい。
 
 cap = cv2.VideoCapture(VIDEO_FILE)
 
@@ -102,7 +106,7 @@ with mp_hands.Hands(
     fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
 
     # VideoWriterを作成します。
-    video = cv2.VideoWriter('./output/annotated_video.mp4', fmt, fps, (width, height))
+    video = cv2.VideoWriter(f'./output/annotated_video_{filename}.mp4', fmt, fps, (width, height))
 
     while cap.isOpened():
         success, image = cap.read()
@@ -142,3 +146,4 @@ with mp_hands.Hands(
         video.write(annotated_image)
     video.release()
 cap.release()
+"""

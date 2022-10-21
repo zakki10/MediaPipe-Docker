@@ -1,0 +1,131 @@
+import cv2
+import mediapipe as mp
+import pathlib
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_hands = mp.solutions.hands
+
+'''
+入力画像上にランドマークを重ねた画像を生成する関数。
+Arguments
+ - image:     入力画像
+ - landmarks: ランドマークの推定結果
+Return
+ - ランドマークを重ねた画像
+'''
+def draw_landmarks(image, landmarks):
+    annotated_image = image.copy()
+    for hand_landmarks in landmarks.multi_hand_landmarks:
+        mp_drawing.draw_landmarks(
+            annotated_image,
+            hand_landmarks,
+            mp_hands.HAND_CONNECTIONS,
+            mp_drawing_styles.get_default_hand_landmarks_style(),
+            mp_drawing_styles.get_default_hand_connections_style()
+        )
+    return annotated_image
+
+'''
+=== 画像の場合 ================================================
+'''
+"""
+dirs = pathlib.Path('input').iterdir()
+for dir in dirs:
+    files = dir.iterdir()
+    for file in files:
+        with mp_hands.Hands(
+           static_image_mode = True,      # 単体の画像かどうか(Falseの場合は入力画像を連続したものとして扱います)。
+           max_num_hands = 2,             # 認識する手の最大数。
+           model_complexity = 1,          # 手のランドマークモデルの複雑さ(0 or 1)。
+           min_detection_confidence = 0.5 # 検出が成功したと見なされるための最小信頼値(0.0 ~ 1.0)。
+         ) as hands:
+           # IMAGE_FILESの画像を一枚ずつ処理します。
+           for index, file in enumerate(files):
+               # MediaPipeHandsでは、入力画像は左右反転したものであると仮定して処理されます。
+               # その対策として、事前に入力画像を左右反転処理を行います。
+               image = cv2.flip(cv2.imread(file), 1) 
+               # BGR画像をRGBに変換します。
+               image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+               # 画像からランドマークを推定します。
+               landmarks = hands.process(image)
+               '''
+                   landmarks.multi_handedness
+                    - label: 左右どちらの手、score: 利き手の確率
+                   landmarks.multi_hand_landmarks
+                    - xとyはそれぞれ画像の幅と高さで[0.0, 1.0]に正規化された座標データ(zはxと同じスケーリングで奥行を表しています)
+                   landmarks.multi_hand_world_landmarks
+                    - 手のおおよその幾何学的中心を原点とするメートル単位の実世界3次元座標データ
+               '''
+               # ランドマークが推定できていない場合はスキップします。
+               if not landmarks.multi_hand_landmarks:
+                   continue
+               
+               # 画像上に推定したランドマークを描画します。
+               annotated_image = draw_landmarks(image, landmarks)
+               # 左右の反転を元に戻します。
+               annotated_image = cv2.flip(annotated_image, 1)
+               # RGB画像をBGRに変換します。
+               annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
+               # ランドマークを描画した画像を出力します。
+               cv2.imwrite('./output/annotated_image_' + str(index) + '.png', annotated_image)
+               # ワールド座標系のランドマーク座標をテキストファイルに書き出します。
+               with open('./output/world_lamdmarks_' + str(index) + file + '.txt', mode='w') as file:
+                   file.write(str(landmarks.multi_hand_world_landmarks))
+      """      
+                
+                           
+IMAGE_FILES = ['input/sample_072.png'] # 画像のファイルパスを配列に格納して下さい。
+filename = 'image'
+with mp_hands.Hands(
+    static_image_mode = True,      # 単体の画像かどうか(Falseの場合は入力画像を連続したものとして扱います)。
+    max_num_hands = 2,             # 認識する手の最大数。
+    model_complexity = 1,          # 手のランドマークモデルの複雑さ(0 or 1)。
+    min_detection_confidence = 0.5 # 検出が成功したと見なされるための最小信頼値(0.0 ~ 1.0)。
+) as hands:
+    # IMAGE_FILESの画像を一枚ずつ処理します。
+    for index, file in enumerate(IMAGE_FILES):
+
+        # MediaPipeHandsでは、入力画像は左右反転したものであると仮定して処理されます。
+        # その対策として、事前に入力画像を左右反転処理を行います。
+        image = cv2.flip(cv2.imread(file), 1) 
+
+        # BGR画像をRGBに変換します。
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        # 画像からランドマークを推定します。
+        landmarks = hands.process(image)
+        '''
+            landmarks.multi_handedness
+             - label: 左右どちらの手、score: 利き手の確率
+            landmarks.multi_hand_landmarks
+             - xとyはそれぞれ画像の幅と高さで[0.0, 1.0]に正規化された座標データ(zはxと同じスケーリングで奥行を表しています)
+            landmarks.multi_hand_world_landmarks
+             - 手のおおよその幾何学的中心を原点とするメートル単位の実世界3次元座標データ
+        '''
+        data = []
+        data = landmarks.multi_hand_world_landmarks
+        n = 21
+        for i in range(0, len(data), n):
+            print(data[i: i+n])
+        
+        
+        # ランドマークが推定できていない場合はスキップします。
+        if not landmarks.multi_hand_landmarks:
+            continue
+
+        # 画像上に推定したランドマークを描画します。
+        annotated_image = draw_landmarks(image, landmarks)
+
+        # 左右の反転を元に戻します。
+        annotated_image = cv2.flip(annotated_image, 1)
+
+        # RGB画像をBGRに変換します。
+        annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
+
+        # ランドマークを描画した画像を出力します。
+        cv2.imwrite('./output/annotated_image_' + str(index) + '.png', annotated_image)
+
+        # ワールド座標系のランドマーク座標をテキストファイルに書き出します。
+        with open('./output/world_lamdmarks_' + str(index) + filename + '.txt', mode='w') as file:
+            file.write(str(landmarks.multi_hand_world_landmarks))
+            
