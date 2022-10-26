@@ -61,7 +61,7 @@ with mp_hands.Hands(
             continue
 
         # 画像上に推定したランドマークを描画します。
-        annotated_image = draw_landmarks(image, landmarks)
+        annotated_image = draw_landmarks('./input/white.png', landmarks)
 
         # 左右の反転を元に戻します。
         annotated_image = cv2.flip(annotated_image, 1)
@@ -70,10 +70,10 @@ with mp_hands.Hands(
         annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
 
         # ランドマークを描画した画像を出力します。
-        cv2.imwrite('./output/annotated_image_' + str(index) + '_' + filename + '.png', annotated_image)
+        cv2.imwrite('./output/annotated_image_' + str(index + 1) + '_' + filename + '.png', annotated_image)
 
         # ワールド座標系のランドマーク座標をテキストファイルに書き出します。
-        with open('./output/world_lamdmarks_' + str(index) + filename + '.txt', mode='w') as file:
+        with open('./output/world_lamdmarks_' + str(index + 1) + filename + '.txt', mode='w') as file:
             file.write(str(landmarks.multi_hand_world_landmarks))
                 
         

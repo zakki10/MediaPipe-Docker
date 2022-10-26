@@ -1,5 +1,7 @@
 import cv2
 import mediapipe as mp
+import numpy as np
+import math
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -75,8 +77,65 @@ with mp_hands.Hands(
         # ワールド座標系のランドマーク座標をテキストファイルに書き出します。
         with open('./output/world_lamdmarks_' + str(index) + filename + '.txt', mode='w') as file:
             file.write(str(landmarks.multi_hand_world_landmarks))
-                
+
+        print(landmarks.multi_handedness) 
+        list_landmark = ['WRIST', 'THUMP_CMC', 'THUMB_MCP', 'THUMB_IP', 'THUMB_TIP', 'INDEX_FINGER_MCP', 'INDEX_F\
+                        INGER_PIP', 'INDEX_FINGER_DIP', 'INDEX_FINGER_TIP', 'MIDDLE_FINGER_MCP', 'MIDDLE_FINGER_PIP', 'MIDDLE_FIN\
+                        GER_DIP', 'MIDDLE_FINGER_TIP', 'RING_FINGER_MCP', 'RING_FINGER_PIP', 'RING_FINGER_DIP', 'RING_FINGER_TIP'\
+                        , 'PINKY_MCP', 'PINKY_PIP', 'PINKY_DIP', 'PINKY_TIP']
         
+        for hand_landmarks in landmarks.multi_hand_world_landmarks:
+            a = np.array([hand_landmarks.landmark[5]])
+            print(a)
+            b = np.array([hand_landmarks.landmark[6]])
+            c = np.array([hand_landmarks.landmark[7]])
+
+            # ベクトルを定義
+            vec_a = a - b
+            vec_c = c - b
+
+            # コサインの計算
+            length_vec_a = np.linalg.norm(vec_a)
+            length_vec_c = np.linalg.norm(vec_c)
+            inner_product = np.inner(vec_a, vec_c)
+            cos = inner_product / (length_vec_a * length_vec_c)
+
+            # 角度（ラジアン）の計算
+            rad = np.arccos(cos)
+
+            # 弧度法から度数法（rad ➔ 度）への変換
+            degree = np.rad2deg(rad)
+
+            print(degree)
+            
+            for i in range(21):
+                print(list_landmark[i])
+                print(hand_landmarks.landmark[i])
+            
+            '''
+            a = hand_landmarks.landmarks[5]
+            b = hand_landmarks.landmarks[6]
+            c = hand_landmarks.landmarks[7]
+
+            # ベクトルを定義
+            vec_a = a - b
+            vec_c = c - b
+
+            # コサインの計算
+            length_vec_a = np.linalg.norm(vec_a)
+            length_vec_c = np.linalg.norm(vec_c)
+            inner_product = np.inner(vec_a, vec_c)
+            cos = inner_product / (length_vec_a * length_vec_c)
+
+            # 角度（ラジアン）の計算
+            rad = np.arccos(cos)
+
+            # 弧度法から度数法（rad ➔ 度）への変換
+            degree = np.rad2deg(rad)
+
+            print(degree)
+            '''
+                    
 
 '''
 === 動画の場合 ================================================
